@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcane Countdown</title>
+  <link rel="icon" href="images/WebIcon.jpg" type="image/jpeg">
+  <style>
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: white;
+      text-align: center;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+      overflow: hidden;
+    }
+
+    .countdown {
+      font-size: 5rem;
+      font-weight: bold;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 215, 0, 0.6);
+      padding: 30px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(50, 50, 50, 0.7));
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .label {
+      font-size: 1.5rem;
+      margin-top: 15px;
+      color: #ffcc00;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 10%;
+      left: 5%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .controls button {
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      cursor: pointer;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .controls button img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .controls button:hover {
+      transform: scale(1.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown">
+    <div id="timer">00:00:00</div>
+    <div class="label">Days until the final episode of Arcane</div>
+  </div>
+
+  <div class="controls">
+    <button onclick="setBackground(0)">
+      <img src="images/small_jinx.jpg" alt="Jinx">
+    </button>
+    <button onclick="setBackground(1)">
+      <img src="images/small_vi.jpg" alt="Vi">
+    </button>
+    <button onclick="setBackground(2)">
+      <img src="images/small_cait.jpg" alt="Cait">
+    </button>
+    <button onclick="setBackground(3)">
+      <img src="images/small_caitvi.jpg" alt="CaitVi">
+    </button>
+  </div>
+
+  <script>
+    const targetTime = new Date("2024-11-23 16:00:00").getTime();
+
+    function updateCountdown() {
+      const currentTime = new Date().getTime();
+      const timeLeft = targetTime - currentTime;
+
+      if (timeLeft > 0) {
+        const hours = String(Math.floor(timeLeft / (1000 * 60 * 60))).padStart(2, "0");
+        const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, "0");
+        const seconds = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, "0");
+
+        document.getElementById("timer").textContent = `${hours}:${minutes}:${seconds}`;
+      } else {
+        document.getElementById("timer").textContent = "00:00:00";
+        clearInterval(countdownInterval);
+      }
+    }
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    const images = [
+      "images/jinx.jpg",
+      "images/vi.jpg",
+      "images/cait.jpg",
+      "images/caitvi.jpg"
+    ];
+
+    function setBackground(index) {
+      document.body.style.backgroundImage = `url('${images[index]}')`;
+    }
+
+    let currentImageIndex = 0;
+    function autoChangeBackground() {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      setBackground(currentImageIndex);
+    }
+
+    setBackground(currentImageIndex);
+    setInterval(autoChangeBackground, 10000);
+  </script>
+</body>
+</html>
